@@ -42,7 +42,7 @@
       </div>
 </div>
 
-<td></td>
+
 <style media="screen">
   .fc-title{
     color:white;
@@ -51,10 +51,11 @@
     opacity: 0
   }
 </style>
-<script>
-$(document).ready(function() {
-  var user = {!! auth()->user()->toJson() !!};
 
+<script>
+
+$(document).ready(function() {
+  var user = {!! auth()->user()->toJson() !!}; // инфа о пользователе
   var SITEURL = "{{url('/')}}";
 
 	$.ajaxSetup({
@@ -62,7 +63,7 @@ $(document).ready(function() {
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
-	var calendar = $('#calendar').fullCalendar({
+	var calendar = $('#calendar').fullCalendar({  // Календарь
 		editable: true,
 		events: SITEURL + "/fullcalendar",
 		displayEventTime: true,
@@ -119,7 +120,7 @@ $(document).ready(function() {
 		},
 		selectable: true,
 		selectHelper: true,
-		select: function(start, end, allDay) {
+		select: function(start, end, allDay) { // выбор(создание) отпуска
 			var title = user.name//prompt('Event Title:');
 			if(title) {
 				var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm:ss");
@@ -141,7 +142,7 @@ $(document).ready(function() {
 			}
 			calendar.fullCalendar('unselect');
 		},
-		eventDrop: function(event, delta) {
+		eventDrop: function(event, delta) { // изменение отпуска
       if (event.user == user.name){
         $("tr").each(function() {
           if (event._id == $(this).attr('data-idt'))
@@ -192,7 +193,7 @@ $(document).ready(function() {
       }
 
 		},
-		eventClick: function(event) {
+		eventClick: function(event) {// удаление отпуска
 
       if (event.title == user.name){
         var deleteMsg = confirm("Do you really want to delete?");
@@ -224,12 +225,11 @@ $(document).ready(function() {
 
 		}
 	});
-  $(document).on('click', ".fc-button-group", function(){
-
+  $(document).on('click', ".fc-button-group", function(){ // очистка таблицы при переходе в другой месяц
     $('#tableMain tbody').html(' ')
   })
 
-  $(document).on('click', "#ytv", function(){
+  $(document).on('click', "#ytv", function(){ // утверждение руководителем
     if (user.Director == "1"){
       var start = $(this).parent().parent().find('#startdate').val() + " " + "00:00:00"
       var end = $(this).parent().parent().find('#enddate').val() + " " + "00:00:00"
@@ -251,7 +251,10 @@ $(document).ready(function() {
     })
     }
   })
-  $(document).on('change', "#startdate", function(){
+
+
+
+  $(document).on('change', "#startdate", function(){ // иизменение начальной даты
       if (user.name == $(this).parent().parent().find('#nameuser').text()){
       var start = $(this).parent().parent().find('#startdate').val() + " " + "00:00:00"
       var end = $(this).parent().parent().find('#enddate').val() + " " + "00:00:00"
@@ -273,7 +276,7 @@ $(document).ready(function() {
       alert("Вы можете менять только свой отпуск!");
     }
   })
-  $(document).on('change', "#enddate", function(){
+  $(document).on('change', "#enddate", function(){ // иизменение конечной даты
       if (user.name == $(this).parent().parent().find('#nameuser').text()){
       var start = $(this).parent().parent().find('#startdate').val() + " " + "00:00:00"
       var end = $(this).parent().parent().find('#enddate').val() + " " + "00:00:00"
